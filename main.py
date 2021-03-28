@@ -52,7 +52,7 @@ class Leaderboard():
         conn.commit()
         conn.close()
         
-    def refreshLeaderboards(self, user):
+    def updateLeaderboards(self, user):
         
         #get currently selected difficulty 
         difficulty = q.difficulty
@@ -69,6 +69,79 @@ class Leaderboard():
         elif difficulty == 5:
             self.updateImpossibleLeaderboard(user)
         self.populateLeaderboard()
+    
+    def resetLeaderboards(self, ):
+        
+        conn = sqlite3.connect("sorting_game.db")
+        cur = conn.cursor()
+        sql = '''DELETE FROM easyLeaderboard'''
+        cur.execute(sql)
+        sql = '''DELETE FROM intermediateLeaderboard'''
+        cur.execute(sql)
+        sql = '''DELETE FROM hardLeaderboard'''
+        cur.execute(sql)
+        sql = '''DELETE FROM insaneLeaderboard'''
+        cur.execute(sql)
+        sql = '''DELETE FROM impossibleLeaderboard'''
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        self.populateLeaderboard()
+        
+        
+    def resetEasyLeaderboard(self, ):
+        
+        conn = sqlite3.connect("sorting_game.db")
+        cur = conn.cursor()
+        sql = '''DELETE FROM easyLeaderboard'''
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        self.populateLeaderboard()
+
+
+    def resetIntermediateLeaderboard(self, ):
+        
+        conn = sqlite3.connect("sorting_game.db")
+        cur = conn.cursor()
+        sql = '''DELETE FROM intermediateLeaderboard'''
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        self.populateLeaderboard()
+
+
+    def resetHardLeaderboard(self, ):
+        
+        conn = sqlite3.connect("sorting_game.db")
+        cur = conn.cursor()
+        sql = '''DELETE FROM hardLeaderboard'''
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        self.populateLeaderboard()
+
+
+    def resetInsaneLeaderboard(self, ):
+        
+        conn = sqlite3.connect("sorting_game.db")
+        cur = conn.cursor()
+        sql = '''DELETE FROM Leaderboard'''
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        self.populateLeaderboard()
+        
+    def resetImpossibleLeaderboard(self, ):
+        
+        conn = sqlite3.connect("sorting_game.db")
+        cur = conn.cursor()
+        sql = '''DELETE FROM impossibleLeaderboard'''
+        cur.execute(sql)
+        conn.commit()
+        conn.close()
+        self.populateLeaderboard()
+        
         
     def updateEasyLeaderboard(self, user):
         
@@ -296,7 +369,7 @@ class DragDropListbox(tkinter.Listbox):
             self.insert(i-1, x)
             self.curIndex = i
             
-class Questions():
+class App():
     
 
     level = 1
@@ -308,7 +381,7 @@ class Questions():
 
 
     def reset_game(self, ):
-        #q = Questions()
+        #q = App()
         score_box.config(state='normal')
         score_box.delete(0,tk.END)
         score_box.insert(0,0)
@@ -316,10 +389,21 @@ class Questions():
         listbox.delete(0,tk.END)
         level_var.set(1)
         lives_var.set(self.lives)
+        self.level = 1
+        self.lives = 3
+        self.correct_guesses = 0
+        self.difficulty = ""
+        self.player = ""
 
         # movie_choices = q.start_easy_game()
         
     def new_game(self ):
+        # print(difficultyVar.get())
+        if difficultyVar.get() == 0:
+            tk.messagebox.showinfo("Oops","Please choose a difficulty setting")
+            return
+        else:
+            pass
         answer = messagebox.askyesno("New Game","Are you sure? All current game progress will be lost")
         if answer == True:
             pass
@@ -380,7 +464,7 @@ class Questions():
     #     print("----original list of movies----")
     #     print(movie_choices)
     
-    def show_movies(self):
+    def show_easy_movies(self):
        
         listbox.delete(0,tk.END)
         movie_choices = q.start_easy_game()
@@ -390,9 +474,55 @@ class Questions():
 
         print("----original list of movies----")
         print(movie_choices)
-        # check_answers_button = Button(root, text= 'Submit', command=lambda : Questions.checkAnswers(), width=7)
-        # check_answers_button.grid(column=3, row = , padx=0, pady=0)
-    
+
+    def show_intermediate_movies(self):
+       
+        listbox.delete(0,tk.END)
+        movie_choices = q.start_intermediate_game()
+
+        for title, year in movie_choices:
+          listbox.insert(tk.END, title)
+
+        print("----original list of movies----")
+        print(movie_choices)
+        
+        
+    def show_hard_movies(self):
+       
+        listbox.delete(0,tk.END)
+        movie_choices = q.start_hard_game()
+
+        for title, year in movie_choices:
+          listbox.insert(tk.END, title)
+
+        print("----original list of movies----")
+        print(movie_choices)
+        
+        
+    def show_insane_movies(self):
+       
+        listbox.delete(0,tk.END)
+        movie_choices = q.start_insane_game()
+
+        for title, year in movie_choices:
+          listbox.insert(tk.END, title)
+
+        print("----original list of movies----")
+        print(movie_choices)
+        
+        
+    def show_impossible_movies(self):
+       
+        listbox.delete(0,tk.END)
+        movie_choices = q.start_impossible_game()
+
+        for title, year in movie_choices:
+          listbox.insert(tk.END, title)
+
+        print("----original list of movies----")
+        print(movie_choices)
+        
+        
     def getPrediction(self):
         predictions = listbox.get(0,tk.END)
         print("----predictions----")
@@ -553,7 +683,7 @@ class Questions():
             self.checkImpossibleAnswers()
             
     def checkAnswers(self):
-        correct_guesses = 0
+        self.correct_guesses = 0
         movie_predictions = q.getPrediction()
         print("----user guess----")
         print(movie_predictions)
@@ -562,14 +692,16 @@ class Questions():
         print(correct_order)
         for i in correct_order:
             if i[0] == movie_predictions[(correct_order.index(i))]:
-              correct_guesses +=1
-        if correct_guesses == 5:
+              self.correct_guesses +=1
+        if self.correct_guesses == 5:
           self.level +=1
           level_box.config(state='normal')
           level_box.delete(0,tk.END)
           level_box.insert(0,self.level)
           level_box.config(state='readonly')
-          q.show_movies()
+          self.correct_guesses = 0
+          q.show_easy_movies()
+
         else:
           self.lives -= 1
           lives_box.config(state='normal')
@@ -577,19 +709,19 @@ class Questions():
           lives_box.insert(0,self.lives)
           lives_box.config(state='readonly')
         if self.lives == 0:
-            #tk.messagebox.showinfo("Game Over", "You reached level " + str(self.level))
-            msg = "Submit score to leaderboard"
-            title = "Game Over"
-            field_name = "Name"
-            #fieldValues = []  # we start with blanks for the values
-            user_name = eg.enterbox(msg,title, field_name)
-            self.player = user_name
-            lead.refreshLeaderboards(user_name)
-            # Leaderboard.getEasyLeaderboard()
+            user_name = self.getName()
+            lead.updateLeaderboards(user_name)
             q.reset_game()
-
+            return
+        
+        score_box.config(state='normal')
+        score_box.delete(0,tk.END)
+        score_box.insert(0,self.correct_guesses)
+        score_box.config(state='readonly')
+        
+        
     def checkInsaneAnswers(self):
-        correct_guesses = 0
+        self.correct_guesses = 0
         movie_predictions = q.getPrediction()
         print("----user guess----")
         print(movie_predictions)
@@ -598,14 +730,15 @@ class Questions():
         print(correct_order)
         for i in correct_order:
             if i[0] == movie_predictions[(correct_order.index(i))]:
-              correct_guesses +=1
-        if correct_guesses == 7:
+              self.correct_guesses +=1
+        if self.correct_guesses == 7:
           self.level +=1
           level_box.config(state='normal')
           level_box.delete(0,tk.END)
           level_box.insert(0,self.level)
           level_box.config(state='readonly')
-          q.show_movies()
+          self.correct_guesses = 0
+          q.show_insane_movies()
         else:
           self.lives -= 1
           lives_box.config(state='normal')
@@ -613,20 +746,17 @@ class Questions():
           lives_box.insert(0,self.lives)
           lives_box.config(state='readonly')
         if self.lives == 0:
-            #tk.messagebox.showinfo("Game Over", "You reached level " + str(self.level))
-            msg = "Submit score to leaderboard"
-            title = "Game Over"
-            field_name = "Name"
-            #fieldValues = []  # we start with blanks for the values
-            user_name = eg.enterbox(msg,title, field_name)
-            self.player = user_name
-            lead.refreshLeaderboards(user_name)
-            # Leaderboard.getEasyLeaderboard()
+            user_name = self.getName()
+            lead.updateLeaderboards(user_name)
             q.reset_game()
-
+            
+        score_box.config(state='normal')
+        score_box.delete(0,tk.END)
+        score_box.insert(0,self.correct_guesses)
+        score_box.config(state='readonly')
 
     def checkImpossibleAnswers(self):
-        correct_guesses = 0
+        self.correct_guesses = 0
         movie_predictions = q.getPrediction()
         print("----user guess----")
         print(movie_predictions)
@@ -635,14 +765,15 @@ class Questions():
         print(correct_order)
         for i in correct_order:
             if i[0] == movie_predictions[(correct_order.index(i))]:
-              correct_guesses +=1
-        if correct_guesses == 10:
+              self.correct_guesses +=1
+        if self.correct_guesses == 10:
           self.level +=1
           level_box.config(state='normal')
           level_box.delete(0,tk.END)
           level_box.insert(0,self.level)
           level_box.config(state='readonly')
-          q.show_movies()
+          self.correct_guesses = 0
+          q.show_impossible_movies()
         else:
           self.lives -= 1
           lives_box.config(state='normal')
@@ -650,48 +781,66 @@ class Questions():
           lives_box.insert(0,self.lives)
           lives_box.config(state='readonly')
         if self.lives == 0:
-            #tk.messagebox.showinfo("Game Over", "You reached level " + str(self.level))
-            msg = "Submit score to leaderboard"
-            title = "Game Over"
-            field_name = "Name"
-            #fieldValues = []  # we start with blanks for the values
-            user_name = eg.enterbox(msg,title, field_name)
-            self.player = user_name
-            lead.refreshLeaderboards(user_name)
-            # Leaderboard.getEasyLeaderboard()
+            user_name = self.getName()
+            lead.updateLeaderboards(user_name)
             q.reset_game()
         score_box.config(state='normal')
         score_box.delete(0,tk.END)
-        score_box.insert(0,correct_guesses)
+        score_box.insert(0,self.correct_guesses)
         score_box.config(state='readonly')
         print("correct_guesses =  ")
-        print(correct_guesses)
+        print(self.correct_guesses)
+    
+    
+    def answer_checker(self, ):
         
-        
+        difficulty = q.difficulty
+        if difficulty in [1,2,3]:
+            self.checkAnswers()
+        elif difficulty == 4:
+            self.checkInsaneAnswers()
+        elif difficulty == 5:
+            self.checkImpossibleAnswers()
+
+
 
     
-#print(Questions.start_easy_game())
+    def getName(self ):
+        name = simpledialog.askstring("Game Over","Submit score to Leaderboard")
+        return (name)
 
-# root = tk.Tk()
-# listbox = DragDropListbox(root)
-# for i,name in enumerate(['name'+str(i) for i in range(10)]):
-#   listbox.insert(tk.END, name)
-#   if i % 2 == 0:
-#     listbox.selection_set(i)
-# listbox.pack(fill=tk.BOTH, expand=True)
-# root.mainloop()
+    
+    def set_check_button(self, ):
+        selection = str(difficultyVar.get())
+        print(selection)
+        print("hello")
+        if selection == 1:
+            easyRadioButton.config(borderwidth = 12)
+    
+        
+
+
 
 
 root = tk.Tk()
 root.title("Sort the Movies")
 root.state('zoomed')
-root.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9), weight=1)
-root.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9), weight=1)
-widget_color = '#b1070c'
+root.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9, 10,11), weight=1)
+root.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9,10,11), weight=1)
+#root.config(bg="#330000")
+#widget_color = '#b1070c'
 
-IMAGE_PATH = 'images/cinema_curtains.png'
+#Set color scheme
+widget_color = "#BF0404"
+button_color = "#F29F05"
+
+border_width_size = 4
+
+
+#Add image as background and set to full size
+IMAGE_PATH = 'images/red_border.png'
 # WIDTH, HEIGHT = 1280, 700
-pad = 3
+pad = 80
 WIDTH, HEIGHT = root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad
 # root.geometry('{}x{}'.format(WIDTH, HEIGHT))
 root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad))
@@ -699,6 +848,11 @@ img = ImageTk.PhotoImage(Image.open(IMAGE_PATH).resize((WIDTH, HEIGHT), Image.AN
 lbl = tk.Label(root, image=img)
 lbl.img = img  # Keep a reference in case this code put is in a function.
 lbl.place(relx=0.5, rely=0.5, anchor='center')  # Place label in center of parent.
+
+# Fonts and colour variables
+widget_font = "Ariel"
+font_color = "#FFC000"
+
 
 
 
@@ -717,10 +871,9 @@ tabControl.add(intermediate_tab, text ='Intermediate')
 tabControl.add(hard_tab, text ='Hard')
 tabControl.add(insane_tab, text ='Insane')
 tabControl.add(impossible_tab, text ='Impossible') 
-tabControl.grid(column = 9, row = 5) 
+tabControl.grid(column = 8, row = 5) 
   
-listbox = DragDropListbox(root, height = 20, width = 60, bd = 6, bg = widget_color)
-listbox.grid(column=3, row = 5)
+
 #Create tree view list to show easy leaderboard in easy tab
 
 
@@ -801,78 +954,108 @@ impossible_leaderboard_scrollbar.grid(column=2, row=1, sticky = 'NSW',rowspan=4)
 impossible_leaderboard.config(yscrollcommand = impossible_leaderboard_scrollbar.set)
 impossible_leaderboard_scrollbar.config(command=impossible_leaderboard.yview)
 
+#Button to reset leaderboards
+reset_leaderboard_button = tk.Button(root, text= 'Reset Leaderboard', command=lambda: lead.resetLeaderboards(), width=2, bg = widget_color)
+reset_leaderboard_button.grid(column=8, row = 6, padx=0, pady=10, sticky='nesw')
+
+
+# Pane to select level difficulty
 #Radio buttons to select difficulty
 
 level_difficulty_pane = ttk.Panedwindow(root, orient=tk.VERTICAL)
 
-level_difficulty_frame = ttk.Labelframe(level_difficulty_pane, text='1. Invoice Type')
+level_difficulty_frame = ttk.Frame(level_difficulty_pane)
 level_difficulty_pane.add(level_difficulty_frame, weight = 6)
 
-level_difficulty_pane.grid(column = 1, row = 3, padx=5, pady=5, columnspan = 1, rowspan=4)
+button_padding_y = 4
+button_padding_x = 20
+radio_button_size = 20
+
+level_difficulty_pane.grid(column = 3, row = 3, padx=5, pady=5, columnspan = 2, rowspan=4)
 difficultyVar = tk.IntVar()
-easyRadioButton = Radiobutton(level_difficulty_pane, text="Easy", variable=difficultyVar, value=1)
-intermediateRadioButton = Radiobutton(level_difficulty_pane, text="Intermediate", variable=difficultyVar, value=2)
-hardRadioButton = Radiobutton(level_difficulty_pane, text="Hard", variable=difficultyVar, value=3)
-insaneRadioButton = Radiobutton(level_difficulty_pane, text="Insane", variable=difficultyVar, value=4)
-impossibleRadioButton = Radiobutton(level_difficulty_pane, text="Impossible", variable=difficultyVar, value=5)
+easyRadioButton = tk.Radiobutton(level_difficulty_pane, text="Easy", variable=difficultyVar, value=1, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = LEFT, selectcolor = widget_color, activeforeground = "white", command = lambda: q.set_check_button)
+intermediateRadioButton = tk.Radiobutton(level_difficulty_pane, text="Intermediate", variable=difficultyVar, value=2, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
+hardRadioButton = tk.Radiobutton(level_difficulty_pane, text="Hard", variable=difficultyVar, value=3, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
+insaneRadioButton = tk.Radiobutton(level_difficulty_pane, text="Insane", variable=difficultyVar, value=4, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
+impossibleRadioButton = tk.Radiobutton(level_difficulty_pane, text="Impossible", variable=difficultyVar, value=5, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
 
 
-# level_difficulty_pane.add(quoteRadioButton)
-# level_difficulty_pane.add(interimRadioButton)
-# level_difficulty_pane.add(finalRadioButton)
-# level_difficulty_pane.add(salesRadioButton)
-# level_difficulty_pane.add(recurringRadioButton)
+easyRadioButton.grid(column=0, row=1, padx=button_padding_x, pady=button_padding_y)
+intermediateRadioButton.grid(column=0, row=2, padx=button_padding_x, pady=button_padding_y) 
+hardRadioButton.grid(column=0, row=3, padx=button_padding_x, pady=button_padding_y) 
+insaneRadioButton.grid(column=0, row=4, padx=button_padding_x, pady=button_padding_y) 
+impossibleRadioButton.grid(column=0, row=5, padx=button_padding_x, pady=button_padding_y) 
 
-easyRadioButton.grid(column=0, row=1, padx=20, pady=(15,0))
-intermediateRadioButton.grid(column=0, row=2, padx=5, pady=2) 
-hardRadioButton.grid(column=0, row=3, padx=10, pady=2) 
-insaneRadioButton.grid(column=0, row=4, padx=5, pady=2) 
-impossibleRadioButton.grid(column=0, row=5, padx=5, pady=2) 
 
 # Button to start a new game
-new_game_button = tk.Button(root, text= 'New Game', command=lambda: q.new_game(), width=2, bg = widget_color)
-new_game_button.grid(column=1, row = 6, padx=0, pady=10, sticky='nesw')
+new_game_button = tk.Button(root, text= 'New Game', command=lambda: q.new_game(), width=2, bg = button_color, relief = RAISED)
+new_game_button.grid(column=3, row = 6, padx=5, pady=5, sticky='nesw', columnspan = 2)
 
-#Button to confirm guess
-submit_button = tk.Button(root, text= 'Submit', command=lambda: q.checkAnswers(), width=2, bg = widget_color)
-submit_button.grid(column=3, row = 6, padx=0, pady=10, sticky='nesw')
+# Button to confirm guess
+submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(), width=1, bg = button_color, relief = RAISED)
+submit_button.grid(column=6, row = 6, padx=5, pady=5, sticky='nesw', columnspan=2)
+
+# Create style for frames
+
+# Initialize style
+s = ttk.Style()
+# Create style used by default for all Frames
+s.configure('TFrame', background = widget_color)
+
+# Create style for the first frame
+s.configure('level_difficulty_frame.TFrame', background= 'white')
+# # Use created style in this frame
+# tab1 = ttk.Frame(mainframe, style='Frame1.TFrame')
+# mainframe.add(tab1, text="Tab1")
 
 
-score_box_label = tk.Label(root, text = "Correct Guesses ", font = ('Arial', 12), bg = widget_color)
-score_box_label.grid(column = 2, row = 3, padx=10, pady=10)
+# Create pane to show score, level, and lives info
+
+game_info_pane = ttk.Panedwindow(root, orient=tk.VERTICAL)
+game_info_frame = ttk.Frame(game_info_pane, width = 30)
+game_info_pane.add(game_info_frame, weight = 12)
+game_info_pane.grid(column = 3, row = 4, columnspan = 8, rowspan=1, sticky = 's')
+
+
+level_label = tk.Label(game_info_frame, text = "Level  ", font = ('Arial', 12), bg = widget_color)
+level_label.grid(column =5, row = 2, padx=10, pady=10)
+
+level_var = tk.IntVar()
+level_box = tk.Entry(game_info_frame, textvariable=level_var, font = ('Arial', 20), width = 3, bg = widget_color)
+level_box.grid(column=6, row = 2, padx=10, pady=10, sticky='nesw')
+level_box.config(state='readonly')
+
+#Box to display the number of correct guesses
+score_box_label = tk.Label(game_info_frame, text = "Correct Guesses ", font = ('Arial', 12), bg = widget_color)
+score_box_label.grid(column = 3, row = 2, padx=10, pady=10)
  
 score_var = tk.IntVar()
-score_box = tk.Entry(root, textvariable=score_var, font = ('Arial', 20), width = 16, bg = widget_color)
-score_box.grid(column=3, row = 3, padx=0, pady=10, sticky='nesw')
+score_box = tk.Entry(game_info_frame, textvariable=score_var, font = ('Arial', 20), width = 3, bg = widget_color)
+score_box.grid(column=4, row = 2, padx=10, pady=10, sticky='nesw')
 score_box.config(state='readonly')
 
 
-
+lives_label = tk.Label(game_info_frame, text = "Lives  " , font = ('Arial', 12), bg = widget_color)
+lives_label.grid(column = 7, row = 2, padx=10, pady=10)
 
 lives_var = tk.IntVar()  
-lives_box = tk.Entry(root, textvariable=lives_var, font = ('Arial', 20), width = 16, bg = widget_color)
-lives_box.grid(column=9, row = 0, padx=0, pady=10, sticky='nesw')
+lives_box = tk.Entry(game_info_frame, textvariable=lives_var, font = ('Arial', 20), width = 3, bg = widget_color)
+lives_box.grid(column=8, row = 2, padx=10, pady=10, sticky='nesw')
 lives_box.config(state='readonly')
 
-lives_label = tk.Label(root, text = "Lives  " , font = ('Arial', 12), bg = widget_color)
-lives_label.grid(column = 8, row = 0, padx=10, pady=10)
 
-level_label = tk.Label(root, text = "Level  ", font = ('Arial', 12), bg = widget_color)
-level_label.grid(column = 2, row = 2, padx=10, pady=10)
 
-level_var = tk.IntVar()
-level_box = tk.Entry(root, textvariable=level_var, font = ('Arial', 20), width = 16, bg = widget_color)
-level_box.grid(column=3, row = 2, padx=0, pady=10, sticky='nesw')
-level_box.config(state='readonly')
 
-listbox = DragDropListbox(root, height = 20, width = 60, bd = 6, bg = widget_color)
-listbox.grid(column=3, row = 5)
+
+listbox = DragDropListbox(root, height = 10, width = 38, bd = 2, bg = button_color, font = (widget_font, 28), fg = widget_color, relief = GROOVE, cursor = "double_arrow", selectbackground = "green", justify=CENTER)
+listbox.grid(column=6, row = 5, padx=10, pady=10, columnspan = 2)
 
 #Populate leaderboard
-q = Questions()
+q = App()
 lead = Leaderboard()
 lead.populateLeaderboard()
 lead.createLeaderboardTable()
+# lead.resetLeaderboards()
 
 root.mainloop()
 
