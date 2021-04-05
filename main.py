@@ -11,29 +11,32 @@ from tkinter import ttk
 from tkinter import filedialog
 from tkinter import simpledialog
 import tkinter.scrolledtext
-import pandas as pd
-from pathlib import Path
+#import pandas as pd
+#from pathlib import Path
 import random 
 from PIL import Image, ImageTk
-import easygui as eg
+#import easygui as eg
 
-Path('sorting_game.db').touch()
+#Path('sorting_game.db').touch()
 ###This code allows to print first name from databsase after clicking on button
 
-def connect():
-    conn = sqlite3.connect("sorting_game.db")
-    cur = conn.cursor()
-
-    print (pd.read_sql("SELECT * FROM movie_data", conn))
-    conn.commit()
-    conn.close()
+# def connect():
+#     conn = sqlite3.connect("sorting_game.db")
+#     cur = conn.cursor()
+# 
+#     print (pd.read_sql("SELECT * FROM movie_data", conn))
+#     conn.commit()
+#     conn.close()
 
 
 
 class Leaderboard():
     
     def createLeaderboardTable(self):
-    
+        '''
+        Creates leaderboard tables, using SQLite3, if none have been created already
+        '''
+        
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
         
@@ -50,8 +53,13 @@ class Leaderboard():
         conn.close()
         
     def updateLeaderboards(self, user):
+        '''
+        Checks the difficulty setting and calls the appropriate method to add an entry to the correct leaderboard table
         
-        #get currently selected difficulty 
+        Parameters:
+                    user (String): The user's name/nickname
+        '''
+         
         difficulty = q.difficulty
         print("The difficulty is")
         print(difficulty)
@@ -68,6 +76,9 @@ class Leaderboard():
         self.populateLeaderboard()
     
     def resetLeaderboards(self, ):
+        '''
+        Deletes all entries in all leaderboard tables
+        '''
         
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
@@ -87,6 +98,9 @@ class Leaderboard():
         
         
     def resetEasyLeaderboard(self, ):
+        '''
+        Deletes all entries in the easy leaderboard table
+        '''
         
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
@@ -98,6 +112,9 @@ class Leaderboard():
 
 
     def resetIntermediateLeaderboard(self, ):
+        '''
+        Deletes all entries in the intermediate leaderboard table
+        '''
         
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
@@ -109,6 +126,9 @@ class Leaderboard():
 
 
     def resetHardLeaderboard(self, ):
+        '''
+        Deletes all entries in the hard leaderboard table
+        '''
         
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
@@ -120,6 +140,9 @@ class Leaderboard():
 
 
     def resetInsaneLeaderboard(self, ):
+        '''
+        Deletes all entries in the insane leaderboard table
+        '''
         
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
@@ -130,6 +153,9 @@ class Leaderboard():
         self.populateLeaderboard()
         
     def resetImpossibleLeaderboard(self, ):
+        '''
+        Deletes all entries in the imposible leaderboard table
+        '''
         
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
@@ -141,6 +167,12 @@ class Leaderboard():
         
         
     def updateEasyLeaderboard(self, user):
+        '''
+        Adds an entry into the easy leaderboard table, which includes a name and score
+        
+        Parameters:
+                    user (String): The user's name/nickname
+        '''
         
         score = q.level
         user_name = user
@@ -156,7 +188,13 @@ class Leaderboard():
         
         
     def updateIntermediateLeaderboard(self, user):
-
+        '''
+        Adds an entry into the intermediate leaderboard table, which includes a name and score
+        
+        Parameters:
+                    user (String): The user's name/nickname
+        '''
+        
         score = q.level
         user_name = user
         conn = sqlite3.connect("sorting_game.db")
@@ -171,8 +209,13 @@ class Leaderboard():
         
         
     def updateHardLeaderboard(self, user):
+        '''
+        Adds an entry into the hard leaderboard table, which includes a name and score
         
-        #get currently selected difficulty 
+        Parameters:
+                    user (String): The user's name/nickname
+        '''
+        
         difficulty = q.difficulty
         score = q.level
         user_name = user
@@ -188,7 +231,13 @@ class Leaderboard():
         
         
     def updateInsaneLeaderboard(self, user):
-        #get currently selected difficulty 
+        '''
+        Adds an entry into the insane leaderboard table, which includes a name and score
+        
+        Parameters:
+                    user (String): The user's name/nickname
+        '''
+        
         difficulty = q.difficulty
         score = q.level
         user_name = user
@@ -204,7 +253,13 @@ class Leaderboard():
         
         
     def updateImpossibleLeaderboard(self,user):
-        #get currently selected difficulty 
+        '''
+        Adds an entry into the impossible leaderboard table, which includes a name and score
+        
+        Parameters:
+                    user (String): The user's name/nickname
+        '''
+        
         difficulty = q.difficulty
         score = q.level
         user_name = user
@@ -218,28 +273,17 @@ class Leaderboard():
         conn.commit()
         conn.close()
         
-        
-    
-    # def getEasyLeaderboard(self):
-    #     """ Gets the name and scores of the easy difficulty leaderboard
-    #     
-    #     Returns
-    #     ----------
-    #     List
-    #         A list of leaderboard results
-    #         
-    #     """
-    #     conn = sqlite3.connect("sorting_game.db")
-    #     cur = conn.cursor()
-    #     sql =("SELECT rowid, name, score FROM easyLeaderboard ORDER BY score ASC")
-    #     cur.execute(sql)
-    #     result = cur.fetchall()
-    #     conn.commit
-    #     conn.close
-    #     return (result)
     
     
     def getEasyLeaderboard(self):
+        """ Gets the name and scores of the easy difficulty leaderboard
+        
+        Returns
+        ----------
+        List
+            A list of leaderboard results
+            
+        """
         
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
@@ -283,6 +327,7 @@ class Leaderboard():
         conn.close
         return (result)
     
+    
     def getHardLeaderboard(self):
         """ Gets the name and scores of the hard difficulty leaderboard
         
@@ -306,6 +351,7 @@ class Leaderboard():
         conn.commit
         conn.close
         return (result)
+    
     
     def getInsaneLeaderboard(self):
         """ Gets the name and scores of the insane difficulty leaderboard
@@ -331,6 +377,7 @@ class Leaderboard():
         conn.close
         return (result)
     
+    
     def getImpossibleLeaderboard(self):
         """ Gets the name and scores of the impossible difficulty leaderboard
         
@@ -340,6 +387,7 @@ class Leaderboard():
             A list of leaderboard results
             
         """
+        
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
         cur.execute("CREATE TABLE IF NOT EXISTS impOrdered (ID INTEGER PRIMARY KEY AUTOINCREMENT, name, score)")
@@ -355,7 +403,7 @@ class Leaderboard():
         return (result)
 
     def populateLeaderboard(self):
-        """ Populates the leaderboards"""
+        """ Populates the leaderboards. Makes odd and even places different colours"""
         
         odd_color = widget_color
         even_color = button_color
@@ -416,6 +464,7 @@ class Leaderboard():
         
 class DragDropListbox(tkinter.Listbox):
     """ A Tkinter listbox with drag'n'drop reordering of entries. """
+    
     def __init__(self, master, **kw):
         kw['selectmode'] = tk.SINGLE
         tk.Listbox.__init__(self, master, kw)
@@ -441,7 +490,7 @@ class DragDropListbox(tkinter.Listbox):
             
 class App():
     
-
+    
     level = 1
     lives = 3
     current_movie_choices = []
@@ -451,7 +500,10 @@ class App():
 
 
     def reset_game(self, ):
-        #q = App()
+        '''
+        Resets all of the variables for the class, and score board on the screen
+        '''
+        
         score_box.config(state='normal')
         score_box.delete(0,tk.END)
         score_box.insert(0,0)
@@ -468,7 +520,10 @@ class App():
         # movie_choices = q.start_easy_game()
         
     def new_game(self ):
-        # print(difficultyVar.get())
+        '''
+        Checks which difficulty has been selected and calls the relevant methods to start a new game 
+        '''
+        
         if difficultyVar.get() == 0:
             tk.messagebox.showinfo("Oops","Please choose a difficulty setting")
             return
@@ -480,13 +535,9 @@ class App():
         else:
             return
         q.reset_game()
-        # self.level = 1
-        # self.lives = 3
-        # self.current_movie_choices = []
-        # self.correct_guesses = 0
+
         listbox.delete(0,tk.END)
         level_var.set(1)
-        #lives_var.set(3)
         level_choice = difficultyVar.get()
         self.difficulty = level_choice
         if level_choice == 1:
@@ -517,25 +568,12 @@ class App():
         print("----original list of movies----")
         print(movie_choices)
     
-    # def reset_game(self ):
-    #     # self.level = 1
-    #     # self.lives = 3
-    #     # self.current_movie_choices = 
-    #     # self.correct_guesses = 0
-    #     listbox.delete(0,tk.END)
-    #     level_var.set(1)
-    #     lives_var.set(3)
-    #     movie_choices = q.start_easy_game()
-    #     q.reset_game()
-    # 
-    #     for title, year in movie_choices:
-    #       listbox.insert(tk.END, title)
-    # 
-    #     print("----original list of movies----")
-    #     print(movie_choices)
     
     def show_easy_movies(self):
-       
+        '''
+        Populates the listbox with 5 random movie titles
+        '''
+        
         listbox.delete(0,tk.END)
         movie_choices = q.start_easy_game()
 
@@ -546,7 +584,10 @@ class App():
         print(movie_choices)
 
     def show_intermediate_movies(self):
-       
+        '''
+        Populates the listbox with 5 random movie titles
+        '''
+        
         listbox.delete(0,tk.END)
         movie_choices = q.start_intermediate_game()
 
@@ -558,7 +599,10 @@ class App():
         
         
     def show_hard_movies(self):
-       
+        '''
+        Populates the listbox with 5 random movie titles
+        '''
+        
         listbox.delete(0,tk.END)
         movie_choices = q.start_hard_game()
 
@@ -570,7 +614,10 @@ class App():
         
         
     def show_insane_movies(self):
-       
+        '''
+        Populates the listbox with 7 random movie titles
+        '''
+        
         listbox.delete(0,tk.END)
         movie_choices = q.start_insane_game()
 
@@ -582,7 +629,10 @@ class App():
         
         
     def show_impossible_movies(self):
-       
+        '''
+        Populates the listbox with 10 random movie titles
+        '''
+        
         listbox.delete(0,tk.END)
         movie_choices = q.start_impossible_game()
 
@@ -594,162 +644,189 @@ class App():
         
         
     def getPrediction(self):
+        '''
+        Gets the movies from the listbox
+        
+        Returns:
+                predictions (List): A list of movies in the order that they have been arranged in the listbox
+        '''
+        
         predictions = listbox.get(0,tk.END)
         print("----predictions----")
         print(predictions)
         return predictions
     
     def start_easy_game(self):
+        '''
+        Starts a game on easy difficulty. Gets 10 random movies from the database using the top 100 movies to choose from
+        
+        Returns:
+                movie_choices (List): A list of 5 movies with their title and release year
+        '''
+        
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
         unique_years = False
-        movies = []
         list_length = 0
         lives_var.set(10)
         self.lives = 10
+        
         while list_length < 5:
+          movies = []
           rand_numbers = random.sample(range(1,300), 5)
           cur.execute("SELECT title,year FROM movie_data WHERE id IN (?,?,?,?,?)", rand_numbers)
           movie_choices = cur.fetchall()
-          #movie_choices = [('Stardust', 2007), ('Princess Mononoke', 1997), ('L.A. Confidential', 1997), ('Like Stars on Earth', 2007), ('Barton Fink', 1991)]
-          # print("The set of movies")
-          # print(set(movies))
+
           for i in movie_choices:
             movies.append(i[1])
           list_length = len(set(movies))
-        #print(movie_choices)
-        #answers = movie_choices
+
         self.current_movie_choices = movie_choices
         print("----current movie choices-----")
         print(self.current_movie_choices)
-        #answ = cur.fetchall()
-        #print(answ)
-        # total = total[0]
         conn.commit()
         conn.close()
         return movie_choices
     
     def start_intermediate_game(self):
+        '''
+        Starts a game on intermediate difficulty. Gets 5 random movies from the database using the top 500 movies to choose from
+        
+        Returns:
+                movie_choices (List): A list of 5 movies with their title and release year
+        '''
+        
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
         unique_years = False
-        movies = []
         list_length = 0
         lives_var.set(8)
         self.lives = 8
+        
         while list_length < 5:
+          movies = []
           rand_numbers = random.sample(range(1,500), 5)
           cur.execute("SELECT title,year FROM movie_data WHERE id IN (?,?,?,?,?)", rand_numbers)
           movie_choices = cur.fetchall()
-          #movie_choices = [('Stardust', 2007), ('Princess Mononoke', 1997), ('L.A. Confidential', 1997), ('Like Stars on Earth', 2007), ('Barton Fink', 1991)]
-          # print("The set of movies")
-          # print(set(movies))
+
           for i in movie_choices:
             movies.append(i[1])
+            
           list_length = len(set(movies))
-        #print(movie_choices)
-        #answers = movie_choices
+
         self.current_movie_choices = movie_choices
         print("----current movie choices-----")
         print(self.current_movie_choices)
-        #answ = cur.fetchall()
-        #print(answ)
-        # total = total[0]
+
         conn.commit()
         conn.close()
         return movie_choices
        
     def start_hard_game(self):
+        '''
+        Starts a game on hard difficulty. Gets 5 random movies from the database using the top 700 movies to choose from
+        
+        Returns:
+                movie_choices (List): A list of 5 movies with their title and release year
+        '''
+        
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
         unique_years = False
-        movies = []
         list_length = 0
         lives_var.set(5)
         self.lives = 5
+        
         while list_length < 5:
+          movies = []
           rand_numbers = random.sample(range(1,700), 5)
           cur.execute("SELECT title,year FROM movie_data WHERE id IN (?,?,?,?,?)", rand_numbers)
           movie_choices = cur.fetchall()
-          #movie_choices = [('Stardust', 2007), ('Princess Mononoke', 1997), ('L.A. Confidential', 1997), ('Like Stars on Earth', 2007), ('Barton Fink', 1991)]
-          # print("The set of movies")
-          # print(set(movies))
+
           for i in movie_choices:
             movies.append(i[1])
+            
           list_length = len(set(movies))
-        #print(movie_choices)
-        #answers = movie_choices
+
         self.current_movie_choices = movie_choices
         print("----current movie choices-----")
         print(self.current_movie_choices)
-        #answ = cur.fetchall()
-        #print(answ)
-        # total = total[0]
         conn.commit()
         conn.close()
         return movie_choices
        
     def start_insane_game(self):
+        '''
+        Starts a game on insane difficulty. Gets 7 random movies from the database using the entire 1000 movies to choose from
+        
+        Returns:
+                movie_choices (List): A list of 7 movies with their title and release year
+        '''
+        
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
         unique_years = False
-        movies = []
         list_length = 0
         lives_var.set(5)
         self.lives = 5
-        while list_length < 5:
+        
+        while list_length < 7:
+          movies = []
           rand_numbers = random.sample(range(1,1000), 7)
           cur.execute("SELECT title,year FROM movie_data WHERE id IN (?,?,?,?,?,?,?)", rand_numbers)
           movie_choices = cur.fetchall()
-          #movie_choices = [('Stardust', 2007), ('Princess Mononoke', 1997), ('L.A. Confidential', 1997), ('Like Stars on Earth', 2007), ('Barton Fink', 1991)]
-          # print("The set of movies")
-          # print(set(movies))
+
           for i in movie_choices:
             movies.append(i[1])
+            
           list_length = len(set(movies))
-        #print(movie_choices)
-        #answers = movie_choices
+          
         self.current_movie_choices = movie_choices
         print("----current movie choices-----")
         print(self.current_movie_choices)
-        #answ = cur.fetchall()
-        #print(answ)
-        # total = total[0]
+
         conn.commit()
         conn.close()
         return movie_choices
        
     def start_impossible_game(self):
+        '''
+        Starts a game on impossible difficulty. Gets 10 random movies from the database using the entire 1000 movies to choose from
+        
+        Returns:
+                movie_choices (List): A list of 10 movies with their title and release year
+        '''
+        
         conn = sqlite3.connect("sorting_game.db")
         cur = conn.cursor()
         unique_years = False
-        movies = []
         list_length = 0
         lives_var.set(5)
         self.lives = 5
-        while list_length < 5:
+        
+        while list_length < 10:
+          movies = []
           rand_numbers = random.sample(range(1,1000), 10)
           cur.execute("SELECT title,year FROM movie_data WHERE id IN (?,?,?,?,?,?,?,?,?,?)", rand_numbers)
           movie_choices = cur.fetchall()
-          #movie_choices = [('Stardust', 2007), ('Princess Mononoke', 1997), ('L.A. Confidential', 1997), ('Like Stars on Earth', 2007), ('Barton Fink', 1991)]
-          # print("The set of movies")
-          # print(set(movies))
+          
           for i in movie_choices:
             movies.append(i[1])
+            
           list_length = len(set(movies))
-        #print(movie_choices)
-        #answers = movie_choices
+
         self.current_movie_choices = movie_choices
         print("----current movie choices-----")
         print(self.current_movie_choices)
-        #answ = cur.fetchall()
-        #print(answ)
-        # total = total[0]
+
         conn.commit()
         conn.close()
         return movie_choices
     
     def getResults(self):
+        '''
+        Checks which difficulty setting is being played and then calls the check answer functions 
+        '''
         if self.difficulty == 1 or 2 or 3:
             self.checkAnswers()
         elif self.difficulty == 4:
@@ -758,6 +835,13 @@ class App():
             self.checkImpossibleAnswers()
             
     def checkAnswers(self):
+        '''
+        Called after user submits a guess in the easy, intermediate and hard difficulty as they all have 5 movies to sort
+        Checks how many movies are in the correct order and updates correct guesses label with result
+        Moves user onto the next level if all answers are correct 
+        Removes one from lives if answer is not correct
+        '''
+        
         self.correct_guesses = 0
         movie_predictions = q.getPrediction()
         print("----user guess----")
@@ -796,6 +880,13 @@ class App():
         
         
     def checkInsaneAnswers(self):
+        '''
+        Called after user submits a guess in the insane difficulty 
+        Checks how many movies are in the correct order and updates correct guesses label with result
+        Moves user onto the next level if all answers are correct 
+        Removes one from lives if answer is not correct
+        '''
+        
         self.correct_guesses = 0
         movie_predictions = q.getPrediction()
         print("----user guess----")
@@ -831,6 +922,13 @@ class App():
         score_box.config(state='readonly')
 
     def checkImpossibleAnswers(self):
+        '''
+        Called after user submits a guess in the impossible difficulty
+        Checks how many movies are in the correct order and updates correct guesses label with result
+        Moves user onto the next level if all answers are correct 
+        Removes one from lives if answer is not correct
+        '''
+        
         self.correct_guesses = 0
         movie_predictions = q.getPrediction()
         print("----user guess----")
@@ -868,6 +966,9 @@ class App():
     
     
     def answer_checker(self, ):
+        '''
+        Called when submit button is pressed. Checks which difficulty setting is being played and calls appropriate functions to check answers
+        '''
         
         difficulty = q.difficulty
         if difficulty in [1,2,3]:
@@ -885,7 +986,8 @@ class App():
 
             Returns:
                     name (str): String containing user's name 
-    '''
+        '''
+    
         correct = False
         while correct == False:
             name = simpledialog.askstring("Game Over","Submit score to Leaderboard", parent = root)
@@ -901,20 +1003,20 @@ class App():
         return (name)
 
     
-    def SetCheckButton(self, ):
-        '''
-        
-
-        '''
-        selection = str(difficultyVar.get())
-        print(selection)
-        print("hello")
-        if selection == 1:
-            easyRadioButton.config(borderwidth = 12)
+    # def SetCheckButton(self, ):
+    #     '''
+    #     
+    # 
+    #     '''
+    #     selection = str(difficultyVar.get())
+    # 
+    #     if selection == 1:
+    #         easyRadioButton.config(borderwidth = 12)
     
         
 
     def openHelp(self):
+        
         '''
         Opens a message box with information on how to play the game
         '''
@@ -1102,7 +1204,7 @@ radio_button_size = 20
 
 level_difficulty_pane.grid(column = 4, row = 3, padx=5, pady=5, columnspan = 2, rowspan=4)
 difficultyVar = tk.IntVar()
-easyRadioButton = tk.Radiobutton(level_difficulty_pane, text="Easy", variable=difficultyVar, value=1, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = LEFT, selectcolor = widget_color, activeforeground = "white", command = lambda: q.SetCheckButton)
+easyRadioButton = tk.Radiobutton(level_difficulty_pane, text="Easy", variable=difficultyVar, value=1, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = LEFT, selectcolor = widget_color, activeforeground = "white")
 intermediateRadioButton = tk.Radiobutton(level_difficulty_pane, text="Intermediate", variable=difficultyVar, value=2, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
 hardRadioButton = tk.Radiobutton(level_difficulty_pane, text="Hard", variable=difficultyVar, value=3, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
 insaneRadioButton = tk.Radiobutton(level_difficulty_pane, text="Insane", variable=difficultyVar, value=4, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
