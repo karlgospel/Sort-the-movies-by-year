@@ -1,21 +1,18 @@
 #!/usr/bin/env python3
 
-from tkinter import ttk
-from tkinter import *
+#from tkinter import ttk
+#from tkinter import *
 import tkinter as tk
 import sqlite3
 from tkinter.ttk import *
-from tkinter import Listbox
+#from tkinter import Listbox
 from tkinter import messagebox
 from tkinter import ttk
-from tkinter import filedialog
 from tkinter import simpledialog
 import tkinter.scrolledtext
 #import pandas as pd
-#from pathlib import Path
 import random 
 from PIL import Image, ImageTk
-#import easygui as eg
 
 #Path('sorting_game.db').touch()
 ###This code allows to print first name from databsase after clicking on button
@@ -425,42 +422,42 @@ class Leaderboard():
         easy_leaderboard.delete(*easy_leaderboard.get_children())
         for each in easy_scores:
             if each[0] % 2 == 0:
-                easy_leaderboard.insert("",END,values=each, tags = ("even"))
+                easy_leaderboard.insert("",tk.END,values=each, tags = ("even"))
             else:
-                easy_leaderboard.insert("",END,values=each, tags = ("odd"))
+                easy_leaderboard.insert("",tk.END,values=each, tags = ("odd"))
 
             
         intermediate_scores = self.getIntermediateLeaderboard()
         intermediate_leaderboard.delete(*intermediate_leaderboard.get_children())
         for each in intermediate_scores:
             if each[0] % 2 == 0:
-                intermediate_leaderboard.insert("",END,values=each, tags = ("even"))
+                intermediate_leaderboard.insert("",tk.END,values=each, tags = ("even"))
             else:
-                intermediate_leaderboard.insert("",END,values=each, tags = ("odd"))
+                intermediate_leaderboard.insert("",tk.END,values=each, tags = ("odd"))
                 
         hard_scores = self.getHardLeaderboard()
         hard_leaderboard.delete(*hard_leaderboard.get_children())
         for each in hard_scores:
             if each[0] % 2 == 0:
-                hard_leaderboard.insert("",END,values=each, tags = ("even"))
+                hard_leaderboard.insert("",tk.END,values=each, tags = ("even"))
             else:
-                hard_leaderboard.insert("",END,values=each, tags = ("odd"))
+                hard_leaderboard.insert("",tk.END,values=each, tags = ("odd"))
                 
         insane_scores = self.getInsaneLeaderboard()
         insane_leaderboard.delete(*insane_leaderboard.get_children())
         for each in insane_scores:
             if each[0] % 2 == 0:
-                insane_leaderboard.insert("",END,values=each, tags = ("even"))
+                insane_leaderboard.insert("",tk.END,values=each, tags = ("even"))
             else:
-                insane_leaderboard.insert("",END,values=each, tags = ("odd"))
+                insane_leaderboard.insert("",tk.END,values=each, tags = ("odd"))
                 
         impossible_scores = self.getImpossibleLeaderboard()
         impossible_leaderboard.delete(*impossible_leaderboard.get_children())
         for each in impossible_scores:
             if each[0] % 2 == 0:
-                impossible_leaderboard.insert("",END,values=each, tags = ("even"))
+                impossible_leaderboard.insert("",tk.END,values=each, tags = ("even"))
             else:
-                impossible_leaderboard.insert("",END,values=each, tags = ("odd"))
+                impossible_leaderboard.insert("",tk.END,values=each, tags = ("odd"))
         
 class DragDropListbox(tkinter.Listbox):
     """ A Tkinter listbox with drag'n'drop reordering of entries. """
@@ -1108,11 +1105,11 @@ level_width = 40
 
 easy_leaderboard= ttk.Treeview(easy_tab, column=("col1", "col2", "col3"), show='headings', height=leaderboard_height)
 easy_leaderboard.heading("#1", text="Rank")
-easy_leaderboard.column('#1', stretch=YES, width=rank_width)
+easy_leaderboard.column('#1', stretch=tk.YES, width=rank_width)
 easy_leaderboard.heading("#2", text="Name")
-easy_leaderboard.column('#2', stretch=YES, width=name_width)
+easy_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 easy_leaderboard.heading("#3", text="Level")
-easy_leaderboard.column('#3', stretch=YES, width=level_width)
+easy_leaderboard.column('#3', stretch=tk.YES, width=level_width)
 easy_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 easy_leaderboard_scrollbar = Scrollbar(easy_tab)
@@ -1125,11 +1122,11 @@ easy_leaderboard_scrollbar.config(command=easy_leaderboard.yview)
 
 intermediate_leaderboard= ttk.Treeview(intermediate_tab, column=("col1", "col2", "col3"), show='headings', height=leaderboard_height)
 intermediate_leaderboard.heading("#1", text="Rank")
-intermediate_leaderboard.column('#1', stretch=YES, width=rank_width)
+intermediate_leaderboard.column('#1', stretch=tk.YES, width=rank_width)
 intermediate_leaderboard.heading("#2", text="Name")
-intermediate_leaderboard.column('#2', stretch=YES, width=name_width)
+intermediate_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 intermediate_leaderboard.heading("#3", text="Level")
-intermediate_leaderboard.column('#3', stretch=YES, width=level_width)
+intermediate_leaderboard.column('#3', stretch=tk.YES, width=level_width)
 intermediate_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 intermediate_leaderboard_scrollbar = Scrollbar(intermediate_tab)
@@ -1142,11 +1139,11 @@ intermediate_leaderboard_scrollbar.config(command=intermediate_leaderboard.yview
 
 hard_leaderboard= ttk.Treeview(hard_tab, column=("col1", "col2", "col3"), show='headings', height=leaderboard_height)
 hard_leaderboard.heading("#1", text="Rank")
-hard_leaderboard.column('#1', stretch=YES, width=rank_width)
+hard_leaderboard.column('#1', stretch=tk.YES, width=rank_width)
 hard_leaderboard.heading("#2", text="Name")
-hard_leaderboard.column('#2', stretch=YES, width=name_width)
+hard_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 hard_leaderboard.heading("#3", text="Level")
-hard_leaderboard.column('#3', stretch=YES, width=level_width)
+hard_leaderboard.column('#3', stretch=tk.YES, width=level_width)
 hard_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 hard_leaderboard_scrollbar = Scrollbar(hard_tab)
@@ -1159,11 +1156,11 @@ hard_leaderboard_scrollbar.config(command=hard_leaderboard.yview)
 
 insane_leaderboard= ttk.Treeview(insane_tab, column=("col1", "col2", "col3"), show='headings', height=leaderboard_height)
 insane_leaderboard.heading("#1", text="Rank")
-insane_leaderboard.column('#1', stretch=YES, width=rank_width)
+insane_leaderboard.column('#1', stretch=tk.YES, width=rank_width)
 insane_leaderboard.heading("#2", text="Name")
-insane_leaderboard.column('#2', stretch=YES, width=name_width)
+insane_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 insane_leaderboard.heading("#3", text="Level")
-insane_leaderboard.column('#3', stretch=YES, width=level_width)
+insane_leaderboard.column('#3', stretch=tk.YES, width=level_width)
 insane_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 insane_leaderboard_scrollbar = Scrollbar(insane_tab)
@@ -1176,11 +1173,11 @@ insane_leaderboard_scrollbar.config(command=insane_leaderboard.yview)
 
 impossible_leaderboard= ttk.Treeview(impossible_tab, column=("col1", "col2", "col3"), show='headings', height=leaderboard_height)
 impossible_leaderboard.heading("#1", text="Rank")
-impossible_leaderboard.column('#1', stretch=YES, width=rank_width)
+impossible_leaderboard.column('#1', stretch=tk.YES, width=rank_width)
 impossible_leaderboard.heading("#2", text="Name")
-impossible_leaderboard.column('#2', stretch=YES, width=name_width)
+impossible_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 impossible_leaderboard.heading("#3", text="Level")
-impossible_leaderboard.column('#3', stretch=YES, width=level_width)
+impossible_leaderboard.column('#3', stretch=tk.YES, width=level_width)
 impossible_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 impossible_leaderboard_scrollbar = Scrollbar(impossible_tab)
@@ -1204,11 +1201,11 @@ radio_button_size = 20
 
 level_difficulty_pane.grid(column = 4, row = 3, padx=5, pady=5, columnspan = 2, rowspan=4)
 difficultyVar = tk.IntVar()
-easyRadioButton = tk.Radiobutton(level_difficulty_pane, text="Easy", variable=difficultyVar, value=1, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = LEFT, selectcolor = widget_color, activeforeground = "white")
-intermediateRadioButton = tk.Radiobutton(level_difficulty_pane, text="Intermediate", variable=difficultyVar, value=2, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
-hardRadioButton = tk.Radiobutton(level_difficulty_pane, text="Hard", variable=difficultyVar, value=3, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
-insaneRadioButton = tk.Radiobutton(level_difficulty_pane, text="Insane", variable=difficultyVar, value=4, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
-impossibleRadioButton = tk.Radiobutton(level_difficulty_pane, text="Impossible", variable=difficultyVar, value=5, borderwidth = border_width_size, width = 10, relief = RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = CENTER, selectcolor = widget_color)
+easyRadioButton = tk.Radiobutton(level_difficulty_pane, text="Easy", variable=difficultyVar, value=1, borderwidth = border_width_size, width = 10, relief = tk.RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = tk.LEFT, selectcolor = widget_color, activeforeground = "white")
+intermediateRadioButton = tk.Radiobutton(level_difficulty_pane, text="Intermediate", variable=difficultyVar, value=2, borderwidth = border_width_size, width = 10, relief = tk.RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = tk.CENTER, selectcolor = widget_color)
+hardRadioButton = tk.Radiobutton(level_difficulty_pane, text="Hard", variable=difficultyVar, value=3, borderwidth = border_width_size, width = 10, relief = tk.RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = tk.CENTER, selectcolor = widget_color)
+insaneRadioButton = tk.Radiobutton(level_difficulty_pane, text="Insane", variable=difficultyVar, value=4, borderwidth = border_width_size, width = 10, relief = tk.RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = tk.CENTER, selectcolor = widget_color)
+impossibleRadioButton = tk.Radiobutton(level_difficulty_pane, text="Impossible", variable=difficultyVar, value=5, borderwidth = border_width_size, width = 10, relief = tk.RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = tk.CENTER, selectcolor = widget_color)
 
 
 easyRadioButton.grid(column=0, row=1, padx=button_padding_x, pady=button_padding_y)
@@ -1234,19 +1231,19 @@ help_btn_img = ImageTk.PhotoImage(Image.open(HELP_BUTTON_PATH))
 
 
 # Button to start a new game
-new_game_button = tk.Button(root, text= 'New Game', command=lambda: q.new_game(), image = newgame_btn_img,  bg = "white", relief = FLAT, compound = 'center', bd = 0, activebackground = "white", font = ("Century",16), width = 20, height = 20, fg = font_color)
+new_game_button = tk.Button(root, text= 'New Game', command=lambda: q.new_game(), image = newgame_btn_img,  bg = "white", relief = tk.FLAT, compound = 'center', bd = 0, activebackground = "white", font = ("Century",16), width = 20, height = 20, fg = font_color)
 new_game_button.grid(column=4, row = 6, sticky='nesw', columnspan = 2)
 
 # Button to confirm guess
-#submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(), width=1, bg = button_color, relief = RAISED)
-submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(), image = submit_btn_img,  bg = "white", relief = FLAT, compound = 'center', bd = 0, activebackground = "white",width = 20, height = 20, font = ("Century",16), fg = font_color)
+#submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(), width=1, bg = button_color, relief = tk.RAISED)
+submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(), image = submit_btn_img,  bg = "white", relief = tk.FLAT, compound = 'center', bd = 0, activebackground = "white",width = 20, height = 20, font = ("Century",16), fg = font_color)
 submit_button.grid(column=7, row = 6, sticky='nesw', columnspan=1)
 
 #Button to reset leaderboards
-help_button = tk.Button(root, command=lambda: q.openHelp(), image = help_btn_img,  bg = "white", relief = GROOVE, compound = 'center', bd = 0, activebackground = "white", width = 1)
+help_button = tk.Button(root, command=lambda: q.openHelp(), image = help_btn_img,  bg = "white", relief = tk.GROOVE, compound = 'center', bd = 0, activebackground = "white", width = 1)
 help_button.grid(column=10, row = 6, sticky='nesw', columnspan = 1)
 
-#settings_button = tk.Button(root, command=lambda: q.openHelp(), image = settings_btn_img,  bg = "white", relief = GROOVE, compound = 'center', bd = 0, activebackground = "white", width = 1)
+#settings_button = tk.Button(root, command=lambda: q.openHelp(), image = settings_btn_img,  bg = "white", relief = tk.GROOVE, compound = 'center', bd = 0, activebackground = "white", width = 1)
 # settings_button.grid(column=11, row = 6, sticky='nesw')
 
 # Create style for frames
@@ -1301,7 +1298,7 @@ lives_box.config(state='readonly')
 
 
 
-listbox = DragDropListbox(root, height = 10, width = 38, bd = 2, bg = button_color, font = (widget_font, 28), fg = widget_color, relief = GROOVE, cursor = "double_arrow", selectbackground = button_color, justify=CENTER)
+listbox = DragDropListbox(root, height = 10, width = 38, bd = 2, bg = button_color, font = (widget_font, 28), fg = widget_color, relief = tk.GROOVE, cursor = "double_arrow", selectbackground = button_color, justify=tk.CENTER)
 listbox.grid(column=6, row = 5, padx=10, pady=10, columnspan = 3)
 
 #Populate leaderboard
