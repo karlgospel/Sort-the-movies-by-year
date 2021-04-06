@@ -286,10 +286,14 @@ class Leaderboard():
         cur = conn.cursor()
         #cur.execute("DROP TABLE easyOrdered")
         cur.execute("CREATE TABLE IF NOT EXISTS easyOrdered (ID INTEGER PRIMARY KEY AUTOINCREMENT, name, score)")
-        cur.execute("INSERT INTO easyOrdered (name, score) SELECT name,score FROM easyLeaderboard ORDER BY score DESC")
+        try:
+            cur.execute("INSERT INTO easyOrdered (name, score) SELECT name,score FROM easyLeaderboard ORDER BY score DESC")
+            cur.execute("DROP TABLE easyLeaderboard")
+            cur.execute("ALTER TABLE easyOrdered RENAME TO easyLeaderboard")
+        except Exception:
+            pass
         
-        cur.execute("DROP TABLE easyLeaderboard")
-        cur.execute("ALTER TABLE easyOrdered RENAME TO easyLeaderboard")
+        
         sql =("SELECT rowid, name, score FROM easyLeaderboard")
         cur.execute(sql)
         
@@ -987,16 +991,23 @@ class App():
     
         correct = False
         while correct == False:
-            name = simpledialog.askstring("Game Over","Submit score to Leaderboard", parent = root)
-            if len(name) > 0 and len(name) < 21:
-                correct == True
-                break
-            if len(name) > 20:
-                tk.messagebox.showerror("Sorry", "Oops, That looks a little bit too long")
-            if len(name) == 0:
-                answer = tk.messagebox.askyesno("Are You Sure?", "Did you mean to enter no name?")
-                if answer == True:
-                    correct = True
+            try:
+                name = simpledialog.askstring("Game Over","\n\n         Submit score to Leaderboard         \n                   Enter name below         \n\n", parent = root)
+            except Exception:
+                return
+            try:
+                if len(name) > 0 and len(name) < 21:
+                    correct == True
+                    break
+                if len(name) > 20:
+                    tk.messagebox.showerror("Sorry", "Oops, That looks a little bit too long")
+                if len(name) == 0:
+                    answer = tk.messagebox.askyesno("Are You Sure?", "Did you mean to enter no name?")
+                    if answer == True:
+                        correct = True 
+            except Exception:
+                return
+
         return (name)
 
     
@@ -1019,12 +1030,15 @@ class App():
         '''
         tk.messagebox.showinfo("How To Play", "1. Choose a difficulty \n\n2. Sort the movies by their release date. Oldest movies at the top, newest at the bottom \n\n3. Submit your guess \n\n4. The number of correct guesses is how many movies you have in the correct position \n\n5. Keep guessing until you get the right solution, or you're out of lives \n\n6. Submit your score to the leaderboard \n\n7. Keep playing and beat your high score \n\n8. Have Fun!!! ")
     
+    def main(self, ):
+        pass
+    
 
 
 root = tk.Tk()
 root.title("CineSort")
 root.state('zoomed')
-root.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9, 10,11,12), weight=1)
+root.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9, 10,11,12,13), weight=1)
 root.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9,10,11), weight=1)
 #root.config(bg="#330000")
 #widget_color = '#b1070c'
@@ -1088,7 +1102,7 @@ tabControl.add(intermediate_tab, text ='Intermediate')
 tabControl.add(hard_tab, text ='Hard')
 tabControl.add(insane_tab, text ='Insane')
 tabControl.add(impossible_tab, text ='Impossible') 
-tabControl.grid(column = 9, row = 5, padx=10, pady=10, columnspan = 3) 
+tabControl.grid(column = 9, row = 5, padx=10, pady=0, columnspan = 3) 
   
 
 
@@ -1301,12 +1315,14 @@ lives_box.config(state='readonly')
 listbox = DragDropListbox(root, height = 10, width = 38, bd = 2, bg = button_color, font = (widget_font, 28), fg = widget_color, relief = tk.GROOVE, cursor = "double_arrow", selectbackground = button_color, justify=tk.CENTER)
 listbox.grid(column=6, row = 5, padx=10, pady=10, columnspan = 3)
 
+
 #Populate leaderboard
+
 q = App()
 lead = Leaderboard()
-lead.populateLeaderboard()
 lead.createLeaderboardTable()
-# lead.resetLeaderboards()
+lead.populateLeaderboard()
+#lead.resetLeaderboards()
 
 root.mainloop()
 
