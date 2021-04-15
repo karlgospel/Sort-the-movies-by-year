@@ -13,7 +13,7 @@ import tkinter.scrolledtext
 #import pandas as pd
 import random 
 from PIL import Image, ImageTk
-
+import time
 #Path('sorting_game.db').touch()
 ###This code allows to print first name from databsase after clicking on button
 
@@ -536,7 +536,7 @@ class App():
         else:
             return
         q.reset_game()
-
+        submit_button.config(state = "normal")
         listbox.delete(0,tk.END)
         level_var.set(1)
         level_choice = difficultyVar.get()
@@ -834,7 +834,10 @@ class App():
             self.checkInsaneAnswers()
         elif self.difficulty == 5:
             self.checkImpossibleAnswers()
-            
+    
+    
+
+    
     def checkAnswers(self):
         '''
         Called after user submits a guess in the easy, intermediate and hard difficulty as they all have 5 movies to sort
@@ -868,6 +871,7 @@ class App():
           lives_box.delete(0,tk.END)
           lives_box.insert(0,self.lives)
           lives_box.config(state='readonly')
+          
         if self.lives == 0:
             user_name = self.getName()
             lead.updateLeaderboards(user_name)
@@ -1030,18 +1034,57 @@ class App():
         '''
         tk.messagebox.showinfo("How To Play", "1. Choose a difficulty \n\n2. Sort the movies by their release date. Oldest movies at the top, newest at the bottom \n\n3. Submit your guess \n\n4. The number of correct guesses is how many movies you have in the correct position \n\n5. Keep guessing until you get the right solution, or you're out of lives \n\n6. Submit your score to the leaderboard \n\n7. Keep playing and beat your high score \n\n8. Have Fun!!! ")
     
-    def main(self, ):
-        pass
+    def exit_game(self, ):
+        answer = tk.messagebox.askyesno("Exit Game", "Are you sure you want to leave?")
+        if answer == True:
+            root.destroy()
+        else:
+            return
+    
+def main():
+    pass
     
 
 
 root = tk.Tk()
 root.title("CineSort")
 root.state('zoomed')
+# root.update_idletasks()
+# root.attributes('-fullscreen', True)
+#root.state('iconic')
+root.winfo_geometry()
 root.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9, 10,11,12,13), weight=1)
 root.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9,10,11), weight=1)
 #root.config(bg="#330000")
 #widget_color = '#b1070c'
+
+# root.columnconfigure(0, weight = 1)
+# root.columnconfigure(1, weight = 1)
+# root.columnconfigure(2, weight = 1)
+# root.columnconfigure(3, weight = 0)
+# root.columnconfigure(4, weight = 1)
+# root.columnconfigure(5, weight = 1)
+# root.columnconfigure(6, weight = 0)
+# root.columnconfigure(7, weight = 0)
+# root.columnconfigure(8, weight = 0)
+# root.columnconfigure(9, weight = 1)
+# root.columnconfigure(10, weight = 1)
+# root.columnconfigure(11, weight = 1)
+# root.columnconfigure(12, weight = 1)
+# root.columnconfigure(13, weight = 1)
+# 
+# root.rowconfigure(0, weight = 1)
+# root.rowconfigure(1, weight = 1)
+# root.rowconfigure(2, weight = 1)
+# root.rowconfigure(3, weight = 1)
+# root.rowconfigure(4, weight = 1)
+# root.rowconfigure(5, weight = 1)
+# root.rowconfigure(6, weight = 1)
+# root.rowconfigure(7, weight = 1)
+# root.rowconfigure(8, weight = 1)
+# root.rowconfigure(9, weight = 1)
+# root.rowconfigure(10, weight = 1)
+# root.rowconfigure(11, weight = 1)
 
 #Set color scheme
 widget_color = "#BF0404"
@@ -1050,17 +1093,41 @@ button_color = "#F29F05"
 border_width_size = 4
 
 
+
 #Add image as background and set to full size
-IMAGE_PATH = 'images/red_border.png'
+IMAGE_PATH = 'red_border.png'
 # WIDTH, HEIGHT = 1280, 700
 pad = 80
-WIDTH, HEIGHT = root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad
+# WIDTH, HEIGHT = root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad
 # root.geometry('{}x{}'.format(WIDTH, HEIGHT))
-root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad))
+# root.geometry("{0}x{1}+0+0".format(root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad))
+
+
+#####-----IMPORT IMAGES--------######
+
+WIDTH, HEIGHT = root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad
+root.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
+
 img = ImageTk.PhotoImage(Image.open(IMAGE_PATH).resize((WIDTH, HEIGHT), Image.ANTIALIAS))
 lbl = tk.Label(root, image=img)
 lbl.img = img  # Keep a reference in case this code put is in a function.
 lbl.place(relx=0.5, rely=0.5, anchor='center')  # Place label in center of parent.
+
+# EXIT_IMAGE_PATH = 'cross_button.png'
+# exit_image = ImageTk.PhotoImage(Image.open(EXIT_IMAGE_PATH), Image.ANTIALIAS)
+# exit_button = tk.Button(root, command=lambda: q.exit_game(), image = exit_image)
+# exit_button.grid(column=13, row = 0, columnspan = 1)
+
+# BUTTON_IMAGE_PATH = 'red_rectangle.png'
+# HELP_BUTTON_PATH = 'help.png'
+# # SETTINGS_PATH = 'images/settings.png'
+# WIDTH, HEIGHT = 1280, 700
+
+# submit_btn_img = ImageTk.PhotoImage(Image.open(BUTTON_IMAGE_PATH).resize((150, 70), Image.ANTIALIAS))
+# #submit_btn_img = ImageTk.PhotoImage(Image.open(BUTTON_IMAGE_PATH))
+# 
+# newgame_btn_img = ImageTk.PhotoImage(Image.open(BUTTON_IMAGE_PATH).resize((200, 70), Image.ANTIALIAS))
+# help_btn_img = ImageTk.PhotoImage(Image.open(HELP_BUTTON_PATH))
 
 # Fonts and colour variables
 widget_font = "Ebrima"
@@ -1069,8 +1136,8 @@ font_color = "#FFC000"
 
 # Title of game
 
-title_label = tk.Label(root, text = "CineSort", font = ('Arial', 42), bg = 'white', fg = widget_color)
-title_label.grid(column =0, row = 3, columnspan = 12, rowspan = 1)
+title_label = tk.Label(root, text = "CineSort", font = ('Arial', 20), bg = 'white', fg = widget_color)
+title_label.grid(column =7, row = 3, columnspan = 1, rowspan = 1, sticky = 'sew')
 
 #Create tab control to show leaderboards with style
 style = ttk.Style()                     
@@ -1080,11 +1147,14 @@ mygreen = "#d2ffd2"
 myred = "#dd0202"
 
 style.theme_create( "tabControl", parent="alt", settings={
-        "TNotebook": {"configure": {"tabmargins": [2, 5, 2, 0] } },
+        "TNotebook": {"configure": {"tabmargins": [3, 3, 0, 0] } },
         "TNotebook.Tab": {
-            "configure": {"padding": [5, 1], "background": "white", "foreground": "black", "fontsize": 16, "font": widget_font},
-            "map":       {"background": [("selected", myred)],
-                          "expand": [("selected", [3, 3, 3, 0])] } } } )
+            "configure": {"padding": [0, 0, 0, 0], "background": "yellow", "foreground": widget_color, "fontsize": 1, "font": widget_font},
+            "map":       {"background": [("selected", widget_color)],
+                          "foreground": [("selected", button_color)],
+                          "expand": [("selected", [1, 1, 1, 0])] } } } )
+
+
 
 tabControl = ttk.Notebook(root) 
 
@@ -1102,18 +1172,18 @@ tabControl.add(intermediate_tab, text ='Intermediate')
 tabControl.add(hard_tab, text ='Hard')
 tabControl.add(insane_tab, text ='Insane')
 tabControl.add(impossible_tab, text ='Impossible') 
-tabControl.grid(column = 9, row = 5, padx=10, pady=0, columnspan = 3) 
+tabControl.grid(column = 9, row = 5, padx=0, pady=0, columnspan = 3, sticky = 'w') 
   
 
 
 #Create tree view list to show easy leaderboard in easy tab
 
 
-leaderboard_width = 60
+leaderboard_width = 20
 leaderboard_column = 5
-leaderboard_row = 5
-leaderboard_height = 20
-rank_width = 40
+leaderboard_row = 3
+leaderboard_height = 12
+rank_width = 30
 name_width = 180
 level_width = 40
 
@@ -1124,7 +1194,7 @@ easy_leaderboard.heading("#2", text="Name")
 easy_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 easy_leaderboard.heading("#3", text="Level")
 easy_leaderboard.column('#3', stretch=tk.YES, width=level_width)
-easy_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
+easy_leaderboard.grid(column=0, row=1, padx = 20,pady=16,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 easy_leaderboard_scrollbar = Scrollbar(easy_tab)
 easy_leaderboard_scrollbar.grid(column=3, row=1, sticky = 'NSW',rowspan=4)
@@ -1141,7 +1211,7 @@ intermediate_leaderboard.heading("#2", text="Name")
 intermediate_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 intermediate_leaderboard.heading("#3", text="Level")
 intermediate_leaderboard.column('#3', stretch=tk.YES, width=level_width)
-intermediate_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
+intermediate_leaderboard.grid(column=0, row=1, padx = 20,pady=16,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 intermediate_leaderboard_scrollbar = Scrollbar(intermediate_tab)
 intermediate_leaderboard_scrollbar.grid(column=3, row=1, sticky = 'NSW',rowspan=4)
@@ -1158,7 +1228,7 @@ hard_leaderboard.heading("#2", text="Name")
 hard_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 hard_leaderboard.heading("#3", text="Level")
 hard_leaderboard.column('#3', stretch=tk.YES, width=level_width)
-hard_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
+hard_leaderboard.grid(column=0, row=1, padx = 20,pady=16,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 hard_leaderboard_scrollbar = Scrollbar(hard_tab)
 hard_leaderboard_scrollbar.grid(column=3, row=1, sticky = 'NSW',rowspan=4)
@@ -1175,7 +1245,7 @@ insane_leaderboard.heading("#2", text="Name")
 insane_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 insane_leaderboard.heading("#3", text="Level")
 insane_leaderboard.column('#3', stretch=tk.YES, width=level_width)
-insane_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
+insane_leaderboard.grid(column=0, row=1, padx = 20,pady=16,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 insane_leaderboard_scrollbar = Scrollbar(insane_tab)
 insane_leaderboard_scrollbar.grid(column=3, row=1, sticky = 'NSW',rowspan=4)
@@ -1192,7 +1262,7 @@ impossible_leaderboard.heading("#2", text="Name")
 impossible_leaderboard.column('#2', stretch=tk.YES, width=name_width)
 impossible_leaderboard.heading("#3", text="Level")
 impossible_leaderboard.column('#3', stretch=tk.YES, width=level_width)
-impossible_leaderboard.grid(column=0, row=1, padx = 20,pady=20,rowspan=4, columnspan=2)
+impossible_leaderboard.grid(column=0, row=1, padx = 20,pady=16,rowspan=4, columnspan=2)
 #Add scrollbar to jobTree
 impossible_leaderboard_scrollbar = Scrollbar(impossible_tab)
 impossible_leaderboard_scrollbar.grid(column=3, row=1, sticky = 'NSW',rowspan=4)
@@ -1201,20 +1271,21 @@ impossible_leaderboard_scrollbar.config(command=impossible_leaderboard.yview)
 
 
 
+
 # Pane to select level difficulty
 #Radio buttons to select difficulty
 
-level_difficulty_pane = ttk.Panedwindow(root, orient=tk.VERTICAL)
+#level_difficulty_pane = ttk.Panedwindow(root, orient=tk.VERTICAL)
 
-level_difficulty_frame = ttk.Frame(level_difficulty_pane)
-level_difficulty_pane.add(level_difficulty_frame, weight = 6)
+level_difficulty_pane = ttk.Frame(root)
+#level_difficulty_pane.add(level_difficulty_frame)
 
 button_padding_y = 4
-button_padding_x = 20
-radio_button_size = 20
+button_padding_x = 5
+radio_button_size = 12
 
-level_difficulty_pane.grid(column = 4, row = 3, padx=5, pady=5, columnspan = 2, rowspan=4)
-difficultyVar = tk.IntVar()
+level_difficulty_pane.grid(column = 4, row = 3, padx=5, pady=16, columnspan = 2, rowspan=5, sticky = 'e')
+difficultyVar = tk.IntVar() 
 easyRadioButton = tk.Radiobutton(level_difficulty_pane, text="Easy", variable=difficultyVar, value=1, borderwidth = border_width_size, width = 10, relief = tk.RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = tk.LEFT, selectcolor = widget_color, activeforeground = "white")
 intermediateRadioButton = tk.Radiobutton(level_difficulty_pane, text="Intermediate", variable=difficultyVar, value=2, borderwidth = border_width_size, width = 10, relief = tk.RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = tk.CENTER, selectcolor = widget_color)
 hardRadioButton = tk.Radiobutton(level_difficulty_pane, text="Hard", variable=difficultyVar, value=3, borderwidth = border_width_size, width = 10, relief = tk.RAISED, font = (widget_font, radio_button_size), bg = widget_color, fg = font_color, justify = tk.CENTER, selectcolor = widget_color)
@@ -1229,33 +1300,20 @@ insaneRadioButton.grid(column=0, row=4, padx=button_padding_x, pady=button_paddi
 impossibleRadioButton.grid(column=0, row=5, padx=button_padding_x, pady=button_padding_y) 
 
 
-BUTTON_IMAGE_PATH = 'images/red_rectangle.png'
-HELP_BUTTON_PATH = 'images/help.png'
-# SETTINGS_PATH = 'images/settings.png'
-# WIDTH, HEIGHT = 1280, 700
-
-submit_btn_img = ImageTk.PhotoImage(Image.open(BUTTON_IMAGE_PATH).resize((300, 100), Image.ANTIALIAS))
-#submit_btn_img = ImageTk.PhotoImage(Image.open(BUTTON_IMAGE_PATH))
-
-newgame_btn_img = ImageTk.PhotoImage(Image.open(BUTTON_IMAGE_PATH).resize((200, 100), Image.ANTIALIAS))
-help_btn_img = ImageTk.PhotoImage(Image.open(HELP_BUTTON_PATH))
 # settings_btn_img = ImageTk.PhotoImage(Image.open(SETTINGS_PATH))
 
 #img = ImageTk.PhotoImage(Image.open(IMAGE_PATH).resize((WIDTH, HEIGHT), Image.ANTIALIAS))
 
 
-# Button to start a new game
-new_game_button = tk.Button(root, text= 'New Game', command=lambda: q.new_game(), image = newgame_btn_img,  bg = "white", relief = tk.FLAT, compound = 'center', bd = 0, activebackground = "white", font = ("Century",16), width = 20, height = 20, fg = font_color)
-new_game_button.grid(column=4, row = 6, sticky='nesw', columnspan = 2)
 
-# Button to confirm guess
-#submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(), width=1, bg = button_color, relief = tk.RAISED)
-submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(), image = submit_btn_img,  bg = "white", relief = tk.FLAT, compound = 'center', bd = 0, activebackground = "white",width = 20, height = 20, font = ("Century",16), fg = font_color)
-submit_button.grid(column=7, row = 6, sticky='nesw', columnspan=1)
 
-#Button to reset leaderboards
-help_button = tk.Button(root, command=lambda: q.openHelp(), image = help_btn_img,  bg = "white", relief = tk.GROOVE, compound = 'center', bd = 0, activebackground = "white", width = 1)
-help_button.grid(column=10, row = 6, sticky='nesw', columnspan = 1)
+
+
+
+
+
+
+
 
 #settings_button = tk.Button(root, command=lambda: q.openHelp(), image = settings_btn_img,  bg = "white", relief = tk.GROOVE, compound = 'center', bd = 0, activebackground = "white", width = 1)
 # settings_button.grid(column=11, row = 6, sticky='nesw')
@@ -1277,44 +1335,55 @@ s.configure('level_difficulty_frame.TFrame', background= 'white')
 # Create pane to show score, level, and lives info
 
 game_info_pane = ttk.Panedwindow(root, orient=tk.VERTICAL)
-game_info_frame = ttk.Frame(game_info_pane, width = 30)
-game_info_pane.add(game_info_frame, weight = 12)
+game_info_frame = ttk.Frame(game_info_pane)
+game_info_pane.add(game_info_frame, weight = 1)
 game_info_pane.grid(column = 6, row = 4, columnspan = 3, rowspan=1, sticky = 's')
 #game_info_frame.grid(column = 3, row = 4, columnspan = 8, rowspan=1, sticky = 's')
 
-level_label = tk.Label(game_info_frame, text = "Level  ", font = (widget_font, 16), bg = widget_color, fg = button_color)
-level_label.grid(column =5, row = 2, padx=10, pady=10)
+level_label = tk.Label(game_info_frame, text = "Level  ", font = (widget_font, 12), bg = widget_color, fg = button_color)
+level_label.grid(column =5, row = 2, padx=5, pady=5)
 
 level_var = tk.IntVar()
-level_box = tk.Entry(game_info_frame, textvariable=level_var, font = (widget_font, 20), width = 3, bg = widget_color)
-level_box.grid(column=6, row = 2, padx=10, pady=10, sticky='nesw')
+level_box = tk.Entry(game_info_frame, textvariable=level_var, font = (widget_font, 12), width = 3, bg = widget_color)
+level_box.grid(column=6, row = 2, padx=5, pady=5, sticky='nesw')
 level_box.config(state='readonly')
 
 #Box to display the number of correct guesses
-score_box_label = tk.Label(game_info_frame, text = "Correct Guesses ", font = (widget_font, 16), bg = widget_color, fg = button_color)
-score_box_label.grid(column = 3, row = 2, padx=10, pady=10)
+score_box_label = tk.Label(game_info_frame, text = "Correct Guesses ", font = (widget_font, 12), bg = widget_color, fg = button_color)
+score_box_label.grid(column = 3, row = 2, padx=5, pady=5)
  
 score_var = tk.IntVar()
-score_box = tk.Entry(game_info_frame, textvariable=score_var, font = (widget_font, 20), width = 3, bg = widget_color)
-score_box.grid(column=4, row = 2, padx=10, pady=10, sticky='nesw')
+score_box = tk.Entry(game_info_frame, textvariable=score_var, font = (widget_font, 12), width = 3, bg = widget_color)
+score_box.grid(column=4, row = 2, padx=5, pady=5, sticky='nesw')
 score_box.config(state='readonly')
 
 
-lives_label = tk.Label(game_info_frame, text = "Lives  " , font = (widget_font, 16), bg = widget_color, fg = button_color)
-lives_label.grid(column = 7, row = 2, padx=10, pady=10)
+lives_label = tk.Label(game_info_frame, text = "Lives  " , font = (widget_font, 12), bg = widget_color, fg = button_color)
+lives_label.grid(column = 7, row = 2, padx=5, pady=5)
 
 lives_var = tk.IntVar()  
-lives_box = tk.Entry(game_info_frame, textvariable=lives_var, font = (widget_font, 20), width = 3, bg = widget_color)
-lives_box.grid(column=8, row = 2, padx=10, pady=10, sticky='nesw')
+lives_box = tk.Entry(game_info_frame, textvariable=lives_var, font = (widget_font, 12), width = 3, bg = widget_color)
+lives_box.grid(column=8, row = 2, padx=5, pady=5, sticky='nesw')
 lives_box.config(state='readonly')
 
 
 
 
+listbox = DragDropListbox(root, height = 10, width = 40, bd = 2, bg = button_color, font = (widget_font, 16), fg = widget_color, relief = tk.GROOVE, cursor = "double_arrow", selectbackground = button_color, justify = tk.CENTER)
+listbox.grid(column=6, row = 5, padx=40, pady= 16, columnspan = 3)
 
-listbox = DragDropListbox(root, height = 10, width = 38, bd = 2, bg = button_color, font = (widget_font, 28), fg = widget_color, relief = tk.GROOVE, cursor = "double_arrow", selectbackground = button_color, justify=tk.CENTER)
-listbox.grid(column=6, row = 5, padx=10, pady=10, columnspan = 3)
+# Button to confirm guess
+#submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(), width=1, bg = button_color, relief = tk.RAISED)
+submit_button = tk.Button(root, text= 'Submit', command=lambda: q.answer_checker(),   bg = widget_color, relief = tk.RAISED, compound = 'center', bd = 4, font = ("Century",12), fg = font_color, height = 1)
+submit_button.grid(column = 7, row = 7, sticky='new', columnspan=1)
+submit_button.config(state = "disabled")
+# Button to start a new game
+new_game_button = tk.Button(root, text= 'New Game', padx = 0, command=lambda: q.new_game(),  bg = widget_color, relief = tk.RAISED, compound = 'center', bd = 4, font = ("Century",12) ,fg = font_color, height = 1)
+new_game_button.grid(column=5, row = 7, sticky='new', columnspan = 1)
 
+# #Button to reset leaderboards
+help_button = tk.Button(root, command=lambda: q.openHelp(),   text = "Help",bg = widget_color, relief = tk.RAISED, compound = 'center', bd = 4, font = ("Century",12), fg = font_color , height = 1)
+help_button.grid(column=9, row = 7, sticky='new', columnspan = 1)
 
 #Populate leaderboard
 
@@ -1322,7 +1391,7 @@ q = App()
 lead = Leaderboard()
 lead.createLeaderboardTable()
 lead.populateLeaderboard()
-#lead.resetLeaderboards()
+lead.resetLeaderboards()
 
 root.mainloop()
 
