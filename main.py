@@ -1391,7 +1391,7 @@ q = App()
 lead = Leaderboard()
 lead.createLeaderboardTable()
 lead.populateLeaderboard()
-lead.resetLeaderboards()
+#lead.resetLeaderboards()
 
 root.mainloop()
 
