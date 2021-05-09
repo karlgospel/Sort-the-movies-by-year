@@ -16,7 +16,7 @@ a = Analysis(['main.py'],
              cipher=block_cipher,
              noarchive=False)
 
-a.datas += [('red_border.png','C:\\Users\\karlg\\OneDrive\\Documents\\GitHub\\Sort-the-movies-by-year\\red_border.png', "DATA"),]
+a.datas += [('title.png','C:\\Users\\karlg\\OneDrive\\Documents\\GitHub\\Sort-the-movies-by-year\\title.png', "DATA"),]
 
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=block_cipher)

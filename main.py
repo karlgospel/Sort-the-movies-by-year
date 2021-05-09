@@ -669,8 +669,8 @@ class App():
         cur = conn.cursor()
         unique_years = False
         list_length = 0
-        lives_var.set(10)
-        self.lives = 10
+        lives_var.set(3)
+        self.lives = 3
         
         while list_length < 5:
           movies = []
@@ -701,8 +701,8 @@ class App():
         cur = conn.cursor()
         unique_years = False
         list_length = 0
-        lives_var.set(8)
-        self.lives = 8
+        lives_var.set(3)
+        self.lives = 3
         
         while list_length < 5:
           movies = []
@@ -735,8 +735,8 @@ class App():
         cur = conn.cursor()
         unique_years = False
         list_length = 0
-        lives_var.set(5)
-        self.lives = 5
+        lives_var.set(3)
+        self.lives = 3
         
         while list_length < 5:
           movies = []
@@ -768,8 +768,8 @@ class App():
         cur = conn.cursor()
         unique_years = False
         list_length = 0
-        lives_var.set(5)
-        self.lives = 5
+        lives_var.set(3)
+        self.lives = 3
         
         while list_length < 7:
           movies = []
@@ -802,8 +802,8 @@ class App():
         cur = conn.cursor()
         unique_years = False
         list_length = 0
-        lives_var.set(5)
-        self.lives = 5
+        lives_var.set(3)
+        self.lives = 3
         
         while list_length < 10:
           movies = []
@@ -1055,8 +1055,11 @@ root.state('zoomed')
 root.winfo_geometry()
 root.grid_columnconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9, 10,11,12,13), weight=1)
 root.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9,10,11), weight=1)
-#root.config(bg="#330000")
-#widget_color = '#b1070c'
+root.config(bg="#1D2326")
+bg_color = "#1D2326"
+#Set color scheme
+widget_color = "#590808"
+button_color = "#D9AB73"
 
 # root.columnconfigure(0, weight = 1)
 # root.columnconfigure(1, weight = 1)
@@ -1086,17 +1089,15 @@ root.grid_rowconfigure((0, 1, 2, 3, 4, 5, 6,7,8,9,10,11), weight=1)
 # root.rowconfigure(10, weight = 1)
 # root.rowconfigure(11, weight = 1)
 
-#Set color scheme
-widget_color = "#BF0404"
-button_color = "#F29F05"
+
 
 border_width_size = 4
 
 
 
 #Add image as background and set to full size
-IMAGE_PATH = 'red_border.png'
-# WIDTH, HEIGHT = 1280, 700
+# IMAGE_PATH = 'red_border.png'
+WIDTH, HEIGHT = 400, 100
 pad = 80
 # WIDTH, HEIGHT = root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad
 # root.geometry('{}x{}'.format(WIDTH, HEIGHT))
@@ -1105,13 +1106,13 @@ pad = 80
 
 #####-----IMPORT IMAGES--------######
 
-WIDTH, HEIGHT = root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad
-root.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
-
-img = ImageTk.PhotoImage(Image.open(IMAGE_PATH).resize((WIDTH, HEIGHT), Image.ANTIALIAS))
-lbl = tk.Label(root, image=img)
-lbl.img = img  # Keep a reference in case this code put is in a function.
-lbl.place(relx=0.5, rely=0.5, anchor='center')  # Place label in center of parent.
+# WIDTH, HEIGHT = root.winfo_screenwidth()-pad, root.winfo_screenheight()-pad
+# root.geometry("%dx%d+0+0" % (WIDTH, HEIGHT))
+# 
+# img = ImageTk.PhotoImage(Image.open(IMAGE_PATH).resize((WIDTH, HEIGHT), Image.ANTIALIAS))
+# lbl = tk.Label(root, image=img)
+# lbl.img = img  # Keep a reference in case this code put is in a function.
+# lbl.place(relx=0.5, rely=0.5, anchor='center')  # Place label in center of parent.
 
 # EXIT_IMAGE_PATH = 'cross_button.png'
 # exit_image = ImageTk.PhotoImage(Image.open(EXIT_IMAGE_PATH), Image.ANTIALIAS)
@@ -1129,15 +1130,22 @@ lbl.place(relx=0.5, rely=0.5, anchor='center')  # Place label in center of paren
 # newgame_btn_img = ImageTk.PhotoImage(Image.open(BUTTON_IMAGE_PATH).resize((200, 70), Image.ANTIALIAS))
 # help_btn_img = ImageTk.PhotoImage(Image.open(HELP_BUTTON_PATH))
 
+TITLE_IMAGE_PATH = 'title.png'
+title_img = ImageTk.PhotoImage(Image.open(TITLE_IMAGE_PATH).resize((WIDTH, HEIGHT), Image.ANTIALIAS))
+lbl = tk.Label(root, image=title_img, bg = bg_color)
+lbl.grid(column =0, row = 3, columnspan = 12, rowspan = 1, sticky = 'nsew')
+
+#lbl.img = img  # Keep a reference in case this code put is in a function.
+#lbl.place(relx=0.5, rely=0.5, anchor='center')  # Place label in center of parent.
 # Fonts and colour variables
-widget_font = "Ebrima"
-font_color = "#FFC000"
+widget_font = "URW Gothic L Bold'"
+font_color = button_color
 
 
 # Title of game
 
-title_label = tk.Label(root, text = "CineSort", font = ('Arial', 20), bg = 'white', fg = widget_color)
-title_label.grid(column =7, row = 3, columnspan = 1, rowspan = 1, sticky = 'sew')
+title_label = tk.Label(root, text = "CineSort", font = ('Arial', 32), bg = "#1D2326", fg = button_color)
+#title_label.grid(column =7, row = 3, columnspan = 1, rowspan = 1, sticky = 'sew')
 
 #Create tab control to show leaderboards with style
 style = ttk.Style()                     
@@ -1147,15 +1155,15 @@ mygreen = "#d2ffd2"
 myred = "#dd0202"
 
 style.theme_create( "tabControl", parent="alt", settings={
-        "TNotebook": {"configure": {"tabmargins": [3, 3, 0, 0] } },
+        "TNotebook": {"configure": {"tabmargins": [2, 2, 0, 0] } },
         "TNotebook.Tab": {
-            "configure": {"padding": [0, 0, 0, 0], "background": "yellow", "foreground": widget_color, "fontsize": 1, "font": widget_font},
+            "configure": {"padding": [5, 0, 5, 0], "background": "#8C1127", "foreground": button_color, "font" : ('URW Gothic L', '10')},
             "map":       {"background": [("selected", widget_color)],
                           "foreground": [("selected", button_color)],
                           "expand": [("selected", [1, 1, 1, 0])] } } } )
 
 
-
+#"fontsize": 8, "font": widget_font
 tabControl = ttk.Notebook(root) 
 
 
@@ -1323,15 +1331,15 @@ impossibleRadioButton.grid(column=0, row=5, padx=button_padding_x, pady=button_p
 # Initialize style
 s = ttk.Style()
 # Create style used by default for all Frames
-s.configure('TFrame', background = widget_color)
+s.configure('TFrame', background = "#1D2326")
 
 # Create style for the first frame
-s.configure('level_difficulty_frame.TFrame', background= 'white')
+s.configure('level_difficulty_frame.TFrame', background= "#1D2326")
 # # Use created style in this frame
 # tab1 = ttk.Frame(mainframe, style='Frame1.TFrame')
 # mainframe.add(tab1, text="Tab1")
 
-
+#"font" : ('URW Gothic L', '11', 'bold')
 # Create pane to show score, level, and lives info
 
 game_info_pane = ttk.Panedwindow(root, orient=tk.VERTICAL)
@@ -1340,36 +1348,38 @@ game_info_pane.add(game_info_frame, weight = 1)
 game_info_pane.grid(column = 6, row = 4, columnspan = 3, rowspan=1, sticky = 's')
 #game_info_frame.grid(column = 3, row = 4, columnspan = 8, rowspan=1, sticky = 's')
 
-level_label = tk.Label(game_info_frame, text = "Level  ", font = (widget_font, 12), bg = widget_color, fg = button_color)
+score_font_size = 16
+
+level_label = tk.Label(game_info_frame, text = "Level  ", font = (widget_font, score_font_size), bg = bg_color, fg = button_color)
 level_label.grid(column =5, row = 2, padx=5, pady=5)
 
 level_var = tk.IntVar()
-level_box = tk.Entry(game_info_frame, textvariable=level_var, font = (widget_font, 12), width = 3, bg = widget_color)
+level_box = tk.Entry(game_info_frame, textvariable=level_var, font = (widget_font, score_font_size), width = 3, bg = bg_color)
 level_box.grid(column=6, row = 2, padx=5, pady=5, sticky='nesw')
 level_box.config(state='readonly')
 
 #Box to display the number of correct guesses
-score_box_label = tk.Label(game_info_frame, text = "Correct Guesses ", font = (widget_font, 12), bg = widget_color, fg = button_color)
+score_box_label = tk.Label(game_info_frame, text = "Correct Guesses ", font = (widget_font, score_font_size), bg = bg_color, fg = button_color)
 score_box_label.grid(column = 3, row = 2, padx=5, pady=5)
  
 score_var = tk.IntVar()
-score_box = tk.Entry(game_info_frame, textvariable=score_var, font = (widget_font, 12), width = 3, bg = widget_color)
+score_box = tk.Entry(game_info_frame, textvariable=score_var, font = (widget_font, score_font_size), width = 3, bg = bg_color)
 score_box.grid(column=4, row = 2, padx=5, pady=5, sticky='nesw')
 score_box.config(state='readonly')
 
 
-lives_label = tk.Label(game_info_frame, text = "Lives  " , font = (widget_font, 12), bg = widget_color, fg = button_color)
+lives_label = tk.Label(game_info_frame, text = "Lives  " , font = (widget_font, score_font_size), bg = bg_color, fg = button_color)
 lives_label.grid(column = 7, row = 2, padx=5, pady=5)
 
 lives_var = tk.IntVar()  
-lives_box = tk.Entry(game_info_frame, textvariable=lives_var, font = (widget_font, 12), width = 3, bg = widget_color)
+lives_box = tk.Entry(game_info_frame, textvariable=lives_var, font = (widget_font, score_font_size), width = 3, bg = bg_color)
 lives_box.grid(column=8, row = 2, padx=5, pady=5, sticky='nesw')
 lives_box.config(state='readonly')
 
 
 
 
-listbox = DragDropListbox(root, height = 10, width = 40, bd = 2, bg = button_color, font = (widget_font, 16), fg = widget_color, relief = tk.GROOVE, cursor = "double_arrow", selectbackground = button_color, justify = tk.CENTER)
+listbox = DragDropListbox(root, height = 10, width = 40, bd = 2, bg = button_color, font = (widget_font, 20), fg = widget_color, relief = tk.GROOVE, cursor = "double_arrow", selectbackground = button_color, justify = tk.CENTER)
 listbox.grid(column=6, row = 5, padx=40, pady= 16, columnspan = 3)
 
 # Button to confirm guess
@@ -1383,7 +1393,7 @@ new_game_button.grid(column=5, row = 7, sticky='new', columnspan = 1)
 
 # #Button to reset leaderboards
 help_button = tk.Button(root, command=lambda: q.openHelp(),   text = "Help",bg = widget_color, relief = tk.RAISED, compound = 'center', bd = 4, font = ("Century",12), fg = font_color , height = 1)
-help_button.grid(column=9, row = 7, sticky='new', columnspan = 1)
+help_button.grid(column=10, row = 7, sticky='new', columnspan = 1)
 
 #Populate leaderboard
 
